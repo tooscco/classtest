@@ -1,0 +1,25 @@
+<p>todo works!</p>
+
+<div class="col-8 mx-auto shadow p-3">
+    <div class="col-10 mx-auto ">
+        <h1 class="text-primary text-center">Todo List</h1>
+        <form [formGroup]="todo">
+            <input type="text" formControlName="title" id="title" placeholder="Tiltle" class="w-[100%] my-3 form-control shadow-none" [class.is-valid]="todo.get('text')?.valid" [class.is-invalid]="todo.get('text')?.invalid && todo.get('text')?.touched">
+            <div *ngIf="todo.get('text')?.invalid && todo.get('todo')?.touched">
+                <span class="text-danger" *ngIf="todo.get('text')?.errors?.['required']">Title is required.</span>
+            </div>
+            <textarea formControlName="description" id="description" col="30" rows="5" class="w-[100%] my-3 form-control shadow-none" placeholder="Description" required>Description</textarea>
+            <button type="submit" class="btn btn-outline-primary w-100 mt-2" (click)="todoSave()" [disabled]="todo.invalid" >Save</button>
+        </form>
+    </div>
+    <div *ngFor="let name of array; let i = index" class="shadow w-25 p-3">
+        <div class="col-11 mx-auto">
+            <p>{{i+1}}</p>
+            <p>{{ name?.title}}</p>
+            <p>{{ name?.description}}</p>
+            <button class="btn btn-success me-2" (click)="editTodo(i)">Edit</button>
+            <button class="btn btn-danger" (click)="deleteTodo(i)">Delete</button>
+        </div>
+    </div>
+ </div>
+
