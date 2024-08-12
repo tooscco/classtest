@@ -12,6 +12,7 @@ import { TodoService } from '../services/todo.service';
 })
 export class TodoComponent {
   public array: any[]=[];
+  public editIndex: number | null = null;
   name: any = {};
   constructor (public todoform: FormBuilder, public service:TodoService, public todoservice: TodoService){}
   public todo=this.todoform.group({
@@ -20,34 +21,49 @@ export class TodoComponent {
 
   })
 
+  public todomodal= this.todoform.group({
+    titlemodal: ['', Validators.required],
+    descriptionmodal:'',
+  })
+
   todoSave(){
     this.array.push(this.todo.value)
   localStorage.setItem('todoapp', JSON.stringify(this.array))
   console.log(localStorage['todoapp']);
+  this.todo.reset();
   }
 
   ngOnInit() {
     const data = this.service.getTodo();
      if (data && data.length > 0) {
-       this.name = data[0];
+       this.name = data;
+       console.log(this.name);
      }
-     console.log(this.name);
    }
 
-   deleteTodo(index: number) {
-    this.array.splice(index, 1);
+   deleteTodo(i: number) {
+    this.array.splice(i, 1);
     localStorage.setItem('todoapp', JSON.stringify(this.array));
   }
 
   
 
-  editTodo(index: number) {
-    const todo = this.array[index];
-    this.todo.setValue({
-      title: todo.title,
-      description: todo.description,
+  editTodo(i: number) {
+    const todo = this.array[i];
+    this.todomodal.setValue({
+      titlemodal: todo.title,
+      descriptionmodal: todo.description,
     });
- // Set the edit index to track which item is being edited
+    this.editIndex = i;
+  }
+
+  todomodaledit(){
+    if (this.editIndex !== null) {
+      this.array[this.editIndex] = this.todomodal.value;
+      localStorage.setItem('todoapp', JSON.stringify(this.array));
+      this.editIndex = null; // Reset the edit index after updating
+      this.todomodal.reset(); // Reset the modal form after saving
+    }
   }
 
 }

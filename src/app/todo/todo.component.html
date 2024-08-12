@@ -10,16 +10,41 @@
             </div>
             <textarea formControlName="description" id="description" col="30" rows="5" class="w-[100%] my-3 form-control shadow-none" placeholder="Description" required>Description</textarea>
             <button type="submit" class="btn btn-outline-primary w-100 mt-2" (click)="todoSave()" [disabled]="todo.invalid" >Save</button>
+
+            <div *ngFor="let name of array; let i = index" class="shadow w-25 p-3">
+                <div class="col-11 mx-auto">
+                    <p>{{ i + 1 }}</p>
+                    <p>{{ name?.title}}</p>
+                    <p>{{ name?.description}}</p>
+                    <button class="btn btn-success me-2" (click)="editTodo(i)" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                    <button class="btn btn-danger" (click)="deleteTodo(i)">Delete</button>
+                </div>
+            </div>
         </form>
     </div>
-    <div *ngFor="let name of array; let i = index" class="shadow w-25 p-3">
-        <div class="col-11 mx-auto">
-            <p>{{i+1}}</p>
-            <p>{{ name?.title}}</p>
-            <p>{{ name?.description}}</p>
-            <button class="btn btn-success me-2" (click)="editTodo(i)">Edit</button>
-            <button class="btn btn-danger" (click)="deleteTodo(i)">Delete</button>
-        </div>
-    </div>
  </div>
+  
+  <!-- Modal -->
+   <form [formGroup]="todomodal"></form>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input type="text" formControlName="titlemodal" id="title" placeholder="Tiltle" class="w-[100%] my-3 form-control shadow-none" [class.is-valid]="todomodal.get('text')?.valid" [class.is-invalid]="todomodal.get('text')?.invalid && todo.get('text')?.touched">
+            <div *ngIf="todomodal.get('text')?.invalid && todomodal.get('text')?.touched">
+                <span class="text-danger" *ngIf="todomodal.get('text')?.errors?.['required']">Title is required.</span>
+            </div>
+            <textarea formControlName="descriptionmodal" id="description" col="30" rows="5" class="w-[100%] my-3 form-control shadow-none" placeholder="Description" required>Description</textarea>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+          <button type="button" class="btn btn-primary"  (click)="todomodaledit()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 

@@ -8,7 +8,7 @@ export class TodoService {
   constructor() { }
 
   public getTodo(){
-    return JSON.parse (localStorage.getItem('todoapp')!)|| [];
+    return JSON.parse (localStorage.getItem('todoapp') || '[]');
   }
 
 
